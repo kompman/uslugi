@@ -1,0 +1,8 @@
+{% extends 'common/header.twig' %}
+
+{% block content %}
+<h1>{{ service_info.name }}</h1>
+<p>{{ service_info.description }}</p>
+<p>Price: {{ service_info.price }}</p>
+<img src="{{ service_info.image }}" alt="{{ service_info.name }}">
+{% endblock %}
