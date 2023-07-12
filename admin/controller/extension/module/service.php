@@ -12,6 +12,16 @@ class ControllerExtensionModuleService extends Controller {
         $this->getList();
     }
 
+    public function install() {
+        $this->load->model('extension/module/service');
+        $this->model_extension_module_service->install();
+    }
+
+    public function uninstall() {
+        $this->load->model('extension/module/service');
+        $this->model_extension_module_service->uninstall();
+    }
+
     public function add() {
         $this->load->language('extension/module/service');
 
@@ -138,13 +148,5 @@ class ControllerExtensionModuleService extends Controller {
         return !$this->error;
     }
 
-    public function install() {
-        $this->load->model('extension/module/service');
-        $this->model_extension_module_service->install();
-    }
-
-    public function uninstall() {
-        $this->load->model('extension/module/service');
-        $this->model_extension_module_service->uninstall();
-    }
+   
 }

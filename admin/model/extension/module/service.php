@@ -1,5 +1,21 @@
 <?php
 class ModelExtensionModuleService extends Model {
+     public function install() {
+        $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "service` (
+            `service_id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(64) NOT NULL,
+            `description` text NOT NULL,
+            `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
+            `image` varchar(255) DEFAULT NULL,
+            `meta_title` varchar(255) NOT NULL,
+            `meta_description` varchar(255) NOT NULL,
+            PRIMARY KEY (`service_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+    }
+
+    public function uninstall() {
+        $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "service`");
+    }
     public function addService($data) {
         $this->db->query("INSERT INTO " . DB_PREFIX . "service SET 
             name = '" . $this->db->escape($data['name']) . "', 
