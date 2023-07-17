@@ -1,0 +1,47 @@
+<modification>
+    <name>Услуги и заявки</name>
+    <code>service_request</code>
+    <version>1.0</version>
+    <author>Ivan Shvachko</author>
+    <link>http://24krd.ru</link>
+     <file path="admin/controller/common/header.php">
+        <operation>
+            <search><![CDATA[$data['home'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);]]></search>
+            <add position="after"><![CDATA[
+                $data['service_request'] = $this->url->link('extension/module/service_request', 'user_token=' . $this->session->data['user_token'], true);
+            ]]></add>
+        </operation>
+    </file>
+  <file path="admin/view/template/common/header.twig">
+        <operation>
+            <search><![CDATA[<ul class="nav navbar-nav navbar-right">]]></search>
+            <add position="after"><![CDATA[
+                {% if service_request %}
+                <li><a href="{{ service_request }}" ><i class="fa fa-address-card-o" aria-hidden="true"></i> Заявки на услуги</a></li>
+                  {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    
+     <file path="admin/controller/common/column_left.php">
+        <operation>
+            <search><![CDATA[
+               if ($this->user->hasPermission('access', 'catalog/recurring')) {
+            ]]></search>
+            <add position="before"><![CDATA[
+                $data['service'] = $this->url->link('extension/module/service', 'user_token=' . $this->session->data['user_token'], true);
+            ]]></add>
+        </operation>
+    </file>
+     <file path="admin/view/template/common/column_left.twig">
+        <operation>
+            <search><![CDATA[<ul id="menu">]]></search>
+            <add position="replace"><![CDATA[
+               <ul id="menu">
+                {% if service %}
+                <li><a href="{{ service }}" ><i class="fa fa-handshake-o" aria-hidden="true"></i> Услуги</a></li>
+                  {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+</modification>

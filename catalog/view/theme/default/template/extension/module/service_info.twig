@@ -1,8 +1,102 @@
-{% extends 'common/header.twig' %}
+{{ header }}
 
 {% block content %}
-<h1>{{ service_info.name }}</h1>
-<p>{{ service_info.description }}</p>
-<p>Price: {{ service_info.price }}</p>
-<img src="{{ service_info.image }}" alt="{{ service_info.name }}">
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+          <h1>{{ service_info.name }}</h1>  
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+         {% if service_info.image %}
+          <img src="{{ service_info.image }}" alt="{{ service_info.name }}">
+          {% endif %}
+            {% if service_info.description %}
+           <p>{{ service_info.description }}</p> 
+           {% endif %}
+           
+            {% if service_info.price %}
+           <div class="price">
+               {{ service_info.price }}руб.
+           </div>
+            {% endif %}
+        </div>
+        <div class="col-xs-12 col-md-6">
+           {% if service_info.file %}
+            <a href="files/{{ service_info.file }}">Скачать прайс-лист</a>
+            <br>
+             {% endif %}
+            <p class="formzag">
+                Заполните данные
+            </p>
+            
+            <!-- Your content code -->
+<form action="index.php?route=extension/module/service/sendFeedback" method="post" enctype="multipart/form-data" id="feedback-form">
+    <!-- Your form fields -->
+<input type="hidden" name="service_name" value="{{ service_info.name }}" />
+    <div class="form-group">
+        <label for="input-name">Ваше имя:</label>
+        <input type="text" name="name" value="" id="input-name" class="form-control" required />
+        <div class="text-danger" id="error-name"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="input-phone">Номер телефона:</label>
+        <input type="text" name="phone" value="" id="input-phone" class="form-control" required />
+        <div class="text-danger" id="error-phone"></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Отправить заявку</button>
+    <div id="message"></div>
+</form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript"><!--
+$('#feedback-form').on('submit', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: $(this).serialize(),
+        dataType: 'json',
+        beforeSend: function() {
+            $('#message').removeClass('alert alert-danger').addClass('alert alert-info').text('Processing...');
+        },
+        success: function(json) {
+            $('.alert-dismissible').remove();
+            if (json['error']) {
+                $('#message').removeClass('alert alert-info').addClass('alert alert-danger').text(json['error']);
+            }
+            if (json['success']) {
+                $('#message').removeClass('alert alert-info').addClass('alert alert-success').text(json['success']);
+                $('#input-name').val('');
+                $('#input-phone').val('');
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>
+{{ footer }} 
