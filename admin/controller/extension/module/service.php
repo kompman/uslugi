@@ -61,7 +61,12 @@ $upload_directory = '/var/www/fastuser/data/www/school.navinetx.ru/public_html/f
     }
 }
 $data['action'] = $this->url->link('extension/module/service/add', 'user_token=' . $this->session->data['user_token'], true);
-
+// Добавление изображений галереи
+            if (isset($this->request->post['image'])) {
+                $this->request->post['gallery_images'][] = $this->request->post['image'];
+            } else {
+                $this->request->post['gallery_images'] = array();
+            }
             $this->model_extension_module_service->addService($this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->response->redirect($this->url->link('extension/module/service', 'user_token=' . $this->session->data['user_token']));
@@ -112,7 +117,12 @@ $upload_directory = $root_path . '/files/' . $filename;
     }
 }
 $data['action'] = $this->url->link('extension/module/service/edit', 'user_token=' . $this->session->data['user_token'] . '&service_id=' . $this->request->get['service_id'], true);
-
+// Добавление изображений галереи
+            if (isset($this->request->post['image'])) {
+                $this->request->post['gallery_images'][] = $this->request->post['image'];
+            } else {
+                $this->request->post['gallery_images'] = array();
+            }
             $this->model_extension_module_service->editService($this->request->get['service_id'], $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->response->redirect($this->url->link('extension/module/service', 'user_token=' . $this->session->data['user_token']));
@@ -164,7 +174,11 @@ $data['base'] = HTTP_SERVER;
 
     protected function getForm() {
         $data = array();  // Инициализируем переменную $data
-
+ if (!empty($service_info)) {
+            $data['gallery_images'] = $service_info['gallery_images'];
+        } else {
+            $data['gallery_images'] = array();
+        }
         if (isset($this->request->get['service_id'])) {
             // Редактирование существующей услуги
             $service_info = $this->model_extension_module_service->getService($this->request->get['service_id']);

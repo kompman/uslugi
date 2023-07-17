@@ -18,12 +18,18 @@ class ControllerExtensionModuleService extends Controller {
             } else {
                 $image = $this->model_tool_image->resize('no_image.png', 500, 500);
             }
-
+ // Получение изображений галереи
+            $gallery_images = $this->model_extension_module_service->getServiceGalleryImages($result['service_id']);
+            $gallery = [];
+            foreach ($gallery_images as $gallery_image) {
+                $gallery[] = $this->model_tool_image->resize($gallery_image, 500, 500);
+            }
             $data['services'][] = [
                 'name' => $result['name'],
                 'description' => html_entity_decode($result['description']),
                 'price' => $result['price'],
                 'image' => $image,
+                'gallery' => $gallery, 
                 'file' => $this->url->link('download/file', 'filename=' . $result['file']),
                 'meta_title' => $result['meta_title'],
                 'meta_description' => $result['meta_description'],
@@ -64,10 +70,15 @@ class ControllerExtensionModuleService extends Controller {
         } else {
             $image = $this->model_tool_image->resize('no_image.png', 500, 500);
         }
-
+// Получение изображений галереи
+            $gallery_images = $this->model_extension_module_service->getServiceGalleryImages($service_id);
+            $gallery = [];
+            foreach ($gallery_images as $gallery_image) {
+                $gallery[] = $this->model_tool_image->resize($gallery_image, 500, 500);
+            }
         
         $service_info['description'] = html_entity_decode($service_info['description'], ENT_QUOTES, 'UTF-8');
-
+            $data['service_info'] = array_merge($service_info, ['image' => $image, 'gallery' => $gallery]); // Добавляем галерею в данные услуги
         $data['service_info'] = array_merge($service_info, ['image' => $image]);
 
         $data['header'] = $this->load->controller('common/header');
