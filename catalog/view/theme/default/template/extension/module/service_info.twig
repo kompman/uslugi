@@ -53,22 +53,35 @@
 </form>
         </div>
     </div>
+
+    <!-- Добавление галереи -->
+    <div class="row">
+        <div class="col">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for image in service_info.gallery %}
+                        <div class="swiper-slide">
+                            <a href="{{ image }}" data-fancybox="gallery">
+                                <img src="{{ image }}" alt="{{ service_info.name }}">
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
 {% endblock %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 <script type="text/javascript"><!--
 $('#feedback-form').on('submit', function(e) {
@@ -98,5 +111,20 @@ $('#feedback-form').on('submit', function(e) {
         }
     });
 });
+
+// Initialize Swiper
+var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 4,
+    spaceBetween: 10,
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+});
 //--></script>
+
 {{ footer }} 
